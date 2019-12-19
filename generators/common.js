@@ -2,12 +2,12 @@ const BaseGenerator = require('generator-jhipster/generators/generator-base');
 
 module.exports = class extends BaseGenerator {
 
-    importUUID(file, importNeedle = 'import java.util.List;') {
+    importUUID(file, importNeedle = 'java.util.Optional;') {
         this.replaceContent(file, importNeedle, `${importNeedle}\nimport java.util.UUID;`);
     }
 
     longToUUID(file) {
-        this.importUUID(file, 'import java.util.Objects;');
+        this.importUUID(file, 'java.io.Serializable;');
         this.replaceContent(file, 'Long', 'UUID', true);
     }
 

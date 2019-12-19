@@ -15,7 +15,7 @@ util.inherits(JhipsterGenerator, BaseGenerator);
 module.exports = JhipsterGenerator.extend({
     initializing: {
         readConfig() {
-            this.jhipsterAppConfig = this.getJhipsterAppConfig();
+            this.jhipsterAppConfig = this.getAllJhipsterConfig();
             if (!this.jhipsterAppConfig) {
                 this.error('Can\'t read .yo-rc.json');
             }
@@ -81,7 +81,7 @@ module.exports = JhipsterGenerator.extend({
                 // We need to convert this entity
 
                 // JAVA
-                this.convertIDtoUUIDForColumn(`${javaDir}domain/${entityName}.java`, 'import java.util.Objects;', 'id');
+                this.convertIDtoUUIDForColumn(`${javaDir}domain/${entityName}.java`, 'import java.io.Serializable;', 'id');
 
                 // DTO
                 if (fs.existsSync(`${javaDir}service/dto/${entityName}DTO.java`)) {
@@ -107,13 +107,13 @@ module.exports = JhipsterGenerator.extend({
 
                 // Service
                 if (fs.existsSync(`${javaDir}service/${entityName}Service.java`)) {
-                    this.importUUID(`${javaDir}service/${entityName}Service.java`, 'import org.slf4j.LoggerFactory;');
+                    this.importUUID(`${javaDir}service/${entityName}Service.java`, 'import java.util.List;');
                     this.longToUUID(`${javaDir}service/${entityName}Service.java`);
                 }
 
                 // ServiceImp
                 if (fs.existsSync(`${javaDir}service/impl/${entityName}ServiceImpl.java`)) {
-                    this.importUUID(`${javaDir}service/impl/${entityName}ServiceImpl.java`, 'import org.slf4j.LoggerFactory;');
+                    this.importUUID(`${javaDir}service/impl/${entityName}ServiceImpl.java`, 'import org.springframework.transaction.annotation.Transactional;');
                     this.longToUUID(`${javaDir}service/impl/${entityName}ServiceImpl.java`);
                 }
 
@@ -133,14 +133,14 @@ module.exports = JhipsterGenerator.extend({
 
                 // Test
                 // Handle the question of life check
-                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIntTest.java`, '(42L|42)', 'UUID.fromString("00000000-0000-0000-0000-000000000042")', true);
-                this.importUUID(`${javaTestDir}/web/rest/${entityName}ResourceIntTest.java`, 'import java.util.List;');
-                this.longToUUID(`${javaTestDir}/web/rest/${entityName}ResourceIntTest.java`);
-                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIntTest.java`, '1L', 'UUID.fromString("00000000-0000-0000-0000-000000000001")', true);
-                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIntTest.java`, '2L', 'UUID.fromString("00000000-0000-0000-0000-000000000002")', true);
-                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIntTest.java`, 'getId\\(\\)\\.intValue\\(\\)', 'getId().toString()', true);
-                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIntTest.java`, '\\.intValue\\(\\)', '.toString()', true);
-                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIntTest.java`, 'MAX_VALUE', 'randomUUID()', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '(42L|42)', 'UUID.fromString("00000000-0000-0000-0000-000000000042")', true);
+                this.importUUID(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, 'java.util.Set;');
+                this.longToUUID(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '1L', 'UUID.fromString("00000000-0000-0000-0000-000000000001")', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '2L', 'UUID.fromString("00000000-0000-0000-0000-000000000002")', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, 'getId\\(\\)\\.intValue\\(\\)', 'getId().toString()', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '\\.intValue\\(\\)', '.toString()', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, 'MAX_VALUE', 'randomUUID()', true);
             }
         },
 
