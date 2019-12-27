@@ -116,6 +116,18 @@ module.exports = JhipsterGenerator.extend({
                     this.importUUID(`${javaDir}service/impl/${entityName}ServiceImpl.java`, 'import org.springframework.transaction.annotation.Transactional;');
                     this.longToUUID(`${javaDir}service/impl/${entityName}ServiceImpl.java`);
                 }
+                if (fs.existsSync(`${javaDir}service/dto/${entityName}Criteria.java`)) {
+
+                    this.replaceContent(`${javaDir}service/dto/${entityName}Criteria.java`, 'import io.github.jhipster.service.filter.StringFilter;', `import io.github.jhipster.service.filter.StringFilter;\nimport io.github.jhipster.service.filter.UUIDFilter;`);
+                    this.replaceContent(`${javaDir}service/dto/${entityName}Criteria.java`, 'LongFilter id', 'UUIDFilter id', true);
+                    this.replaceContent(`${javaDir}service/dto/${entityName}Criteria.java`, 'LongFilter getId\\(\\)', 'UUIDFilter getId()', true);
+                    this.replaceContent(`${javaDir}service/dto/${entityName}Criteria.java`, 'LongFilter setId\\(\\)', 'UUIDFilter setId(UUIDFilter id)', true);
+                }
+
+                if (fs.existsSync(`${javaDir}service/${entityName}QueryService.java`)) {
+                    this.replaceContent(`${javaDir}service/${entityName}QueryService.java`, 'buildRangeSpecification\\(criteria\\.getId\\(\\)', 'buildSpecification\\(criteria\\.getId\\(\\)', true);
+                }
+
 
                 // Resource
                 this.importUUID(`${javaDir}web/rest/${entityName}Resource.java`);
