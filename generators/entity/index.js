@@ -120,6 +120,7 @@ module.exports = JhipsterGenerator.extend({
                 // Resource
                 this.importUUID(`${javaDir}web/rest/${entityName}Resource.java`);
                 this.longToUUID(`${javaDir}web/rest/${entityName}Resource.java`);
+                this.replaceContent(`${javaDir}web/rest/${entityName}Resource.java`, `ResponseEntity<UUID> count${entityName}`, `ResponseEntity<Long> count${entityName}`, true);
 
                 // JavaScript
                 const entityNameSpinalCased = _s.dasherize(_s.decapitalize(entityName));
@@ -134,13 +135,21 @@ module.exports = JhipsterGenerator.extend({
                 // Test
                 // Handle the question of life check
                 this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '(42L|42)', 'UUID.fromString("00000000-0000-0000-0000-000000000042")', true);
-                this.importUUID(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, 'java.util.Set;');
+                this.importUUID(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, 'java.util.List;');
                 this.longToUUID(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`);
                 this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '1L', 'UUID.fromString("00000000-0000-0000-0000-000000000001")', true);
                 this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '2L', 'UUID.fromString("00000000-0000-0000-0000-000000000002")', true);
                 this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, 'getId\\(\\)\\.intValue\\(\\)', 'getId().toString()', true);
                 this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '\\.intValue\\(\\)', '.toString()', true);
                 this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, 'MAX_VALUE', 'randomUUID()', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '\\s\\(\\w.*\\s\\+\\s1\\)', ' UUID.randomUUID()', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '.*id.greaterThanOrEqual.*', '', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '.*id.greaterThan.*', '', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '.*id.lessThanOrEqual.*', '', true);
+                this.replaceContent(`${javaTestDir}/web/rest/${entityName}ResourceIT.java`, '.*id.lessThan.*', '', true);
+
+
+
             }
         },
 
